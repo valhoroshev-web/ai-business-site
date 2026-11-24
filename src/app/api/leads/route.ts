@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { getLeadDelivery, isLeadFormReady } from "@/lib/lead-config";
+import { verifyIconAnswer } from "@/lib/icon-captcha";
 
 export const runtime = "nodejs";
 
@@ -11,6 +12,8 @@ type LeadPayload = {
   website?: unknown;
   consent?: unknown;
   turnstileToken?: unknown;
+  iconCaptchaToken?: unknown;
+  iconCaptchaAnswer?: unknown;
   utmSource?: unknown;
   utmMedium?: unknown;
   utmCampaign?: unknown;
@@ -67,6 +70,8 @@ export async function POST(request: Request) {
   const company = getText(payload.company, 120);
   const message = getText(payload.message, 2000);
   const token = getText(payload.turnstileToken, 2200);
+  const iconToken = getText(payload.iconCaptchaToken, 150);
+  const iconAnswer = getText(payload.iconCaptchaAnswer, 40);
   const utmSource = getText(payload.utmSource, 100);
   const utmMedium = getText(payload.utmMedium, 100);
   const utmCampaign = getText(payload.utmCampaign, 100);
@@ -76,7 +81,9 @@ export async function POST(request: Request) {
     contact.length < 5 ||
     message.length < 10 ||
     payload.consent !== true ||
-    !token
+    !token ||
+    !iconToken ||
+    !iconAnswer
   ) {
     return NextResponse.json(
       { error: "Проверьте поля и согласие на обработку данных." },
@@ -111,6 +118,14 @@ export async function POST(request: Request) {
       );
     }
 
+    // Icon task is additional friction; Turnstile above remains the real bot defense.
+    if (!verifyIconAnswer(iconToken, iconAnswer)) {
+      return NextResponse.json(
+        { error: "Проверка иконок не пройдена или истекло время. Выберите новую иконку." },
+        { status: 400 },
+      );
+    }
+
     const lines = [
       "Новая заявка с сайта AI PROFI",
       "Имя: " + name,
@@ -137,7 +152,7 @@ export async function POST(request: Request) {
         },
         body: JSON.stringify({
           from: process.env.RESEND_FROM_EMAIL,
-          to: [process.env.RESEND_TO_EMAIL || "valhoroshev@gmail.com"],
+          to: [process.env.RESEND_TO_EMAIL],
           subject: "Новая заявка с сайта AI PROFI",
           text: lines.join("\n"),
           ...replyTo,
