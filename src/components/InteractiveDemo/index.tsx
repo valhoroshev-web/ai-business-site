@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import { trackGoal } from "@/components/Analytics/track";
 
 type DemoId = "sales" | "exchange" | "reports";
 type DemoCase = {
@@ -106,6 +107,7 @@ export default function InteractiveDemo() {
             aria-controls="demo-panel"
             onClick={() => {
               setSelected(item.id);
+              trackGoal("demo_select", { scenario: item.id });
               setShowResult(false);
             }}
             className={
@@ -154,7 +156,7 @@ export default function InteractiveDemo() {
             </ol>
             <button
               type="button"
-              onClick={() => setShowResult((value) => !value)}
+              onClick={() => { if (!showResult) trackGoal("demo_result", { scenario: demo.id }); setShowResult((value) => !value); }}
               className="mt-9 w-full rounded-lg bg-primary px-6 py-4 font-semibold text-white transition hover:bg-primary/90 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
               aria-expanded={showResult}
               aria-controls="demo-result"

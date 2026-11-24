@@ -3,6 +3,7 @@
 import { useMemo, useState } from "react";
 import Link from "next/link";
 import { useCaseCategories, useCases } from "@/data/use-cases";
+import { trackGoal } from "@/components/Analytics/track";
 
 export default function UseCaseCatalog() {
   const [query, setQuery] = useState("");
@@ -63,7 +64,7 @@ export default function UseCaseCatalog() {
                 <Link href={"/use-cases/" + item.slug} className="hover:text-primary">{item.title}</Link>
               </h2>
               <p className="mb-6 flex-1 text-sm leading-relaxed text-body-color dark:text-body-color-dark">{item.summary}</p>
-              <Link href={"/use-cases/" + item.slug} className="inline-flex font-semibold text-primary hover:underline" aria-label={"Подробнее: " + item.title}>Разобрать сценарий <span className="ml-2" aria-hidden="true">→</span></Link>
+              <Link href={"/use-cases/" + item.slug} onClick={() => trackGoal("catalog_open", { slug: item.slug, category: item.category })} className="inline-flex font-semibold text-primary hover:underline" aria-label={"Подробнее: " + item.title}>Разобрать сценарий <span className="ml-2" aria-hidden="true">→</span></Link>
             </article>
           ))}
         </div>

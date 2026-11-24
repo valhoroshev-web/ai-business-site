@@ -1,13 +1,13 @@
 import Link from "next/link";
 import ContactMethods from "@/components/ContactMethods";
 import type { Metadata } from "next";
+import { useCases } from "@/data/use-cases";
 
 export const metadata: Metadata = {
   title: "ИИ-автоматизация бизнеса, ИИ-агенты и интеграции | AI PROFI",
   description:
     "AI PROFI: ИИ-агенты для обработки обращений, интеграции 1С и CRM, автоматизированная отчётность и устранение рутинных операций в бизнесе.",
-  // Сайт пока прототип. Индексацию включим после подключения заявок,
-  // юридических страниц и утверждения коммерческого предложения.
+  // Индексацию включаем после утверждения юридической документации и контента.
   robots: { index: process.env.SITE_READY_FOR_INDEXING === "true", follow: process.env.SITE_READY_FOR_INDEXING === "true" },
 };
 
@@ -181,10 +181,10 @@ export default function Home() {
                   Обсудить задачу
                 </Link>
                 <Link
-                  href="#scenarios"
+                  href="/use-cases"
                   className="rounded-lg border border-gray-200 bg-white px-7 py-4 text-center text-base font-semibold text-black transition hover:border-primary hover:text-primary dark:border-white/20 dark:bg-white/5 dark:text-white"
                 >
-                  Примеры решений
+                  Каталог ИИ-решений
                 </Link>
               </div>
               <p className="mt-6 max-w-xl text-sm leading-relaxed text-body-color dark:text-body-color-dark">
@@ -231,7 +231,28 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="bg-[#F7F9FF] py-20 dark:bg-[#121824] md:py-28" id="services">
+            <section className="bg-[#F7F9FF] py-16 dark:bg-[#121824] md:py-24" id="use-cases">
+        <div className="container">
+          <div className="mx-auto mb-11 max-w-3xl text-center">
+            <p className="mb-3 text-sm font-semibold uppercase tracking-[0.18em] text-primary">Библиотека AI PROFI</p>
+            <h2 className="mb-5 text-3xl font-bold text-black dark:text-white md:text-4xl">Найдите применение ИИ для своей задачи</h2>
+            <p className="text-lg leading-relaxed text-body-color dark:text-body-color-dark">30 сценариев по продажам, 1С, маркетплейсам, производству, документам и другим направлениям. Объясняем процесс, исходные данные и ограничения — без вымышленных результатов внедрений.</p>
+          </div>
+          <div className="grid gap-5 md:grid-cols-2 lg:grid-cols-3">
+            {useCases.filter((item) => ["email-orders-1c", "marketplace-replenishment", "supplier-offers", "manuals-semantic-search", "visual-defect-inspection", "contract-differences"].includes(item.slug)).map((item) => (
+              <Link key={item.slug} href={"/use-cases/" + item.slug} className="rounded-2xl border border-gray-200 bg-white p-6 transition hover:border-primary hover:shadow-lg dark:border-white/10 dark:bg-gray-dark">
+                <span className="mb-3 block text-xs font-semibold text-primary">{item.category} · {item.industry}</span>
+                <h3 className="mb-3 text-lg font-bold text-black dark:text-white">{item.title}</h3>
+                <p className="mb-4 text-sm leading-relaxed text-body-color dark:text-body-color-dark">{item.summary}</p>
+                <span className="text-sm font-semibold text-primary">Изучить сценарий →</span>
+              </Link>
+            ))}
+          </div>
+          <div className="mt-9 text-center"><Link href="/use-cases" className="inline-flex rounded-lg bg-primary px-7 py-4 font-semibold text-white hover:bg-primary/90">Все 30 сценариев применения ИИ</Link></div>
+        </div>
+      </section>
+
+<section className="bg-[#F7F9FF] py-20 dark:bg-[#121824] md:py-28" id="services">
         <div className="container">
           <SectionHeading
             label="Чем помогаем"

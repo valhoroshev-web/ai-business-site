@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import ThemeToggler from "./ThemeToggler";
 
 const links = [
+  { href: "/use-cases", label: "Каталог решений" },
   { href: "/#services", label: "Услуги" },
   { href: "/#scenarios", label: "Сценарии" },
   { href: "/demo", label: "Демо" },
