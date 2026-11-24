@@ -4,13 +4,13 @@ import { NextRequest, NextResponse } from "next/server";
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
-type Channel = "telegram" | "email";
+type Channel = "telegram" | "email" | "yandex";
 const lifetimeMs = 5 * 60 * 1000;
 
 const headers = { "Cache-Control": "private, no-store, max-age=0" };
 
 function getChannel(value: unknown): Channel | null {
-  return value === "telegram" || value === "email" ? value : null;
+  return value === "telegram" || value === "email" || value === "yandex" ? value : null;
 }
 
 function getDestination(channel: Channel): { url: string; address: string } | null {
@@ -18,6 +18,27 @@ function getDestination(channel: Channel): { url: string; address: string } | nu
     const username = (process.env.CONTACT_TELEGRAM_USERNAME || "").trim().replace(/^@/, "");
     if (!/^[a-zA-Z0-9_]{5,32}$/.test(username)) return null;
     return { url: "https://t.me/" + username, address: "@" + username };
+  }
+  if (channel === "yandex") {
+    const raw = (process.env.CONTACT_YANDEX_URL || "").trim();
+    try {
+      const link = new URL(raw);
+      const hostname = link.hostname.toLowerCase();
+      if (
+        link.protocol !== "https:" ||
+        link.username ||
+        link.password ||
+        !(
+          hostname === "yandex.ru" ||
+          hostname.endsWith(".yandex.ru") ||
+          hostname === "yandex.com" ||
+          hostname.endsWith(".yandex.com")
+        )
+      ) return null;
+      return { url: link.toString(), address: "Яндекс Телемост" };
+    } catch {
+      return null;
+    }
   }
   const email = (process.env.CONTACT_EMAIL || "").trim();
   if (!/^[^\s@<>]+@[^\s@<>]+\.[^\s@<>]+$/.test(email)) return null;

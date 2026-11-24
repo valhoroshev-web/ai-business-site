@@ -39,7 +39,7 @@ export default function Footer() {
             <p className="mb-4 text-sm leading-relaxed text-body-color dark:text-body-color-dark">
               Выберите Telegram или почту, пройдите короткую проверку и получите доступ к нужному контакту.
             </p>
-            <ContactMethods compact />
+            <ContactMethods compact yandexEnabled={Boolean(process.env.CONTACT_YANDEX_URL)} />
           </div>
         </div>
         <div className="mt-12 border-t border-gray-200 pt-6 text-xs text-body-color dark:border-white/10 dark:text-body-color-dark">

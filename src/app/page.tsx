@@ -331,7 +331,7 @@ export default function Home() {
               Выберите Telegram или электронную почту. После простой проверки откроется
               нужный способ связи — контакты не показываются до её прохождения.
             </p>
-            <ContactMethods />
+            <ContactMethods yandexEnabled={Boolean(process.env.CONTACT_YANDEX_URL)} />
           </div>
         </div>
       </section>
