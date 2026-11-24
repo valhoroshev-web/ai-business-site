@@ -76,9 +76,18 @@ export async function POST(request: NextRequest) {
   const secret = process.env.CONTACT_CAPTCHA_SECRET;
   if (!secret || secret.length < 24) return unavailable();
 
-  // Do not expose a contact to scripts making cross-origin browser requests.
+  // Compare the browser's Origin to the incoming Host. Next.js can normalize
+  // request.nextUrl.origin differently from the actual hostname (e.g. locally),
+  // which would incorrectly reject legitimate same-origin submissions.
   const origin = request.headers.get("origin");
-  if (!origin || origin !== request.nextUrl.origin) {
+  const host = request.headers.get("host");
+  let allowedOrigin = false;
+  try {
+    allowedOrigin = Boolean(origin && host && new URL(origin).host === host);
+  } catch {
+    allowedOrigin = false;
+  }
+  if (!allowedOrigin) {
     return NextResponse.json({ error: "Неверный источник запроса." }, { status: 403, headers });
   }
 

@@ -300,9 +300,15 @@ export default function Home() {
               </article>
             ))}
           </div>
-          <p className="mt-7 text-center text-sm leading-relaxed text-body-color dark:text-body-color-dark">
-            Фактическая применимость и показатели зависят от доступных систем, качества исходных данных и согласованного объёма работ.
-          </p>
+          <div className="mt-9 flex flex-col items-center gap-4 text-center">
+            <p className="max-w-3xl text-sm leading-relaxed text-body-color dark:text-body-color-dark">
+              Фактическая применимость и показатели зависят от доступных систем, качества исходных данных и согласованного объёма работ.
+            </p>
+            <Link href="/demo" className="inline-flex items-center justify-center rounded-lg bg-primary px-7 py-4 text-base font-semibold text-white transition hover:bg-primary/90">
+              Открыть интерактивные примеры <span className="ml-2" aria-hidden="true">→</span>
+            </Link>
+            <span className="text-xs leading-relaxed text-body-color dark:text-body-color-dark">Тестовые данные, без подключения к реальным системам</span>
+          </div>
         </div>
       </section>
 
