@@ -37,13 +37,13 @@ export default function Footer() {
           <div className="max-w-xs">
             <h2 className="mb-4 font-semibold text-black dark:text-white">Обратная связь</h2>
             <p className="mb-4 text-sm leading-relaxed text-body-color dark:text-body-color-dark">
-              Выберите Telegram или почту, пройдите короткую проверку и получите доступ к нужному контакту.
+              Выберите Telegram, почту или Яндекс Мессенджер. Контакт откроется после короткой проверки.
             </p>
             <ContactMethods compact yandexEnabled={Boolean(process.env.CONTACT_YANDEX_URL)} />
           </div>
         </div>
         <div className="mt-12 border-t border-gray-200 pt-6 text-xs text-body-color dark:border-white/10 dark:text-body-color-dark">
-          AI PROFI · Демонстрационная версия. Коммерческие условия и юридические документы находятся в разработке.
+          AI PROFI · Описанные сценарии — примеры возможных решений, не клиентские кейсы. Юридические документы находятся в подготовке.
         </div>
       </div>
     </footer>
