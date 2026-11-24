@@ -5,7 +5,7 @@ import type { Metadata } from "next";
 export const metadata: Metadata = {
   title: "ИИ-автоматизация бизнеса, ИИ-агенты и интеграции | AI PROFI",
   description:
-    "Автоматизация бизнес-процессов с помощью ИИ: обработка обращений, интеграции с 1С и CRM, ИИ-агенты, отчётность и поддержка решений.",
+    "AI PROFI: ИИ-агенты для обработки обращений, интеграции 1С и CRM, автоматизированная отчётность и устранение рутинных операций в бизнесе.",
   // Сайт пока прототип. Индексацию включим после подключения заявок,
   // юридических страниц и утверждения коммерческого предложения.
   robots: { index: process.env.SITE_READY_FOR_INDEXING === "true", follow: process.env.SITE_READY_FOR_INDEXING === "true" },
@@ -114,34 +114,53 @@ export default function Home() {
         <div className="pointer-events-none absolute -bottom-40 -left-40 h-[420px] w-[420px] rounded-full bg-primary/5 blur-3xl" />
         <div className="container relative">
           <div className="grid items-center gap-12 lg:grid-cols-2 lg:gap-16">
+
             <div>
-              <div className="mb-7 inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary/5 px-4 py-2 text-sm font-medium text-primary">
-                <span className="h-2 w-2 rounded-full bg-primary" />
-                AI PROFI · ИИ-решения для бизнеса
+              <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary/5 px-4 py-2 text-sm font-semibold text-primary">
+                <span className="h-2 w-2 rounded-full bg-primary" aria-hidden="true" />
+                AI PROFI · ИИ-автоматизация бизнеса
               </div>
               <h1 className="mb-7 text-4xl font-extrabold leading-[1.12] tracking-tight text-black dark:text-white sm:text-5xl xl:text-6xl">
-                Освободим команду от рутины с помощью <span className="text-primary">искусственного интеллекта</span>
+                Автоматизируем рутину в продажах и управлении{" "}
+                <span className="text-primary">с помощью ИИ</span>
               </h1>
-              <p className="mb-9 max-w-xl text-lg leading-relaxed text-body-color dark:text-body-color-dark">
-                Внедряем ИИ-агентов, автоматизируем обработку обращений, объединяем 1С, CRM и другие сервисы в рабочие процессы.
-                Не просто технологии — конкретные задачи бизнеса.
+              <p className="mb-7 max-w-xl text-lg leading-relaxed text-body-color dark:text-body-color-dark">
+                Разрабатываем ИИ-агентов, связываем 1С, CRM и другие сервисы,
+                настраиваем обработку обращений и отчётность. Начинаем с конкретной
+                задачи, чтобы результат можно было проверить.
               </p>
-              <div className="flex flex-wrap gap-3">
+              <div className="mb-9 grid max-w-xl gap-3 sm:grid-cols-3">
+                <div className="rounded-xl border border-gray-200/90 bg-[#F7F9FF] px-4 py-3 dark:border-white/10 dark:bg-white/5">
+                  <span className="mb-1 block text-xs font-bold uppercase tracking-wide text-primary">01</span>
+                  <span className="text-sm font-semibold leading-snug text-dark dark:text-white">Меньше ручных операций</span>
+                </div>
+                <div className="rounded-xl border border-gray-200/90 bg-[#F7F9FF] px-4 py-3 dark:border-white/10 dark:bg-white/5">
+                  <span className="mb-1 block text-xs font-bold uppercase tracking-wide text-primary">02</span>
+                  <span className="text-sm font-semibold leading-snug text-dark dark:text-white">Обмен данными без копирования</span>
+                </div>
+                <div className="rounded-xl border border-gray-200/90 bg-[#F7F9FF] px-4 py-3 dark:border-white/10 dark:bg-white/5">
+                  <span className="mb-1 block text-xs font-bold uppercase tracking-wide text-primary">03</span>
+                  <span className="text-sm font-semibold leading-snug text-dark dark:text-white">Контроль сложных ситуаций</span>
+                </div>
+              </div>
+              <div className="flex flex-col gap-3 sm:flex-row">
                 <Link
-                  href="#services"
+                  href={leadsReady ? "#contact" : "#services"}
                   className="rounded-lg bg-primary px-7 py-4 text-center text-base font-semibold text-white shadow-lg shadow-primary/20 transition hover:bg-primary/90"
                 >
-                  Посмотреть решения
+                  {leadsReady ? "Обсудить автоматизацию" : "Посмотреть услуги"}
                 </Link>
                 <Link
-                  href="#contact"
+                  href="#scenarios"
                   className="rounded-lg border border-gray-200 bg-white px-7 py-4 text-center text-base font-semibold text-black transition hover:border-primary hover:text-primary dark:border-white/20 dark:bg-white/5 dark:text-white"
                 >
-                  Обсудить проект
+                  Примеры решений
                 </Link>
               </div>
-              <p className="mt-7 text-sm leading-relaxed text-body-color dark:text-body-color-dark">
-                Начинаем с анализа процесса и предлагаем автоматизацию там, где её эффект можно проверить.
+              <p className="mt-6 max-w-xl text-sm leading-relaxed text-body-color dark:text-body-color-dark">
+                {leadsReady
+                  ? "Опишите свой процесс — обсудим возможные варианты внедрения."
+                  : "Сайт в подготовке к коммерческому запуску: приём заявок пока отключён."}
               </p>
             </div>
 
