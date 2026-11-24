@@ -1,11 +1,14 @@
 "use client";
 
 import Script from "next/script";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import { usePathname } from "next/navigation";
 
 type Consent = "unknown" | "accepted" | "rejected";
 
 export default function Metrika({ counterId }: { counterId?: string }) {
+  const pathname = usePathname();
+  const lastPath = useRef<string | null>(null);
   const [consent, setConsent] = useState<Consent>("unknown");
   const [loaded, setLoaded] = useState(false);
 
@@ -19,6 +22,16 @@ export default function Metrika({ counterId }: { counterId?: string }) {
       setLoaded(true);
     }
   }, []);
+
+  // Первый просмотр фиксируется кодом инициализации Метрики, следующие — вручную.
+  // Next.js App Router меняет страницу без полной перезагрузки документа.
+  useEffect(() => {
+    if (!loaded || consent !== "accepted" || !counterId || !/^\d+$/.test(counterId)) return;
+    if (lastPath.current === null) { lastPath.current = pathname; return; }
+    if (lastPath.current === pathname) return;
+    lastPath.current = pathname;
+    try { window.ym?.(Number(counterId), "hit", window.location.href); } catch { /* навигация не зависит от Метрики */ }
+  }, [pathname, loaded, consent, counterId]);
 
   if (!counterId || !/^\d+$/.test(counterId) || !loaded) return null;
 

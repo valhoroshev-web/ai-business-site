@@ -61,7 +61,7 @@ export default function UseCaseCatalog() {
                 <span className="rounded-full bg-gray-100 px-3 py-1 text-gray-700 dark:bg-white/10 dark:text-gray-200">{item.industry}</span>
               </div>
               <h2 className="mb-3 text-xl font-bold leading-snug text-black dark:text-white">
-                <Link href={"/use-cases/" + item.slug} className="hover:text-primary">{item.title}</Link>
+                <Link href={"/use-cases/" + item.slug} onClick={() => trackGoal("catalog_open", { slug: item.slug, category: item.category })} className="hover:text-primary">{item.title}</Link>
               </h2>
               <p className="mb-6 flex-1 text-sm leading-relaxed text-body-color dark:text-body-color-dark">{item.summary}</p>
               <Link href={"/use-cases/" + item.slug} onClick={() => trackGoal("catalog_open", { slug: item.slug, category: item.category })} className="inline-flex font-semibold text-primary hover:underline" aria-label={"Подробнее: " + item.title}>Разобрать сценарий <span className="ml-2" aria-hidden="true">→</span></Link>

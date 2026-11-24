@@ -16,6 +16,8 @@ jobs:
           node-version: '22'
       - name: Install dependencies
         run: npm install --no-audit --no-fund
+      - name: Validate use-case catalog
+        run: node scripts/check-catalog.mjs
       - name: Build
         run: npm run build
       - name: Smoke-test contact channels and CAPTCHA (synthetic data)
