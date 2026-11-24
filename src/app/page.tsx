@@ -1,4 +1,5 @@
 import Link from "next/link";
+import LeadForm from "@/components/LeadForm";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -7,7 +8,7 @@ export const metadata: Metadata = {
     "Автоматизация бизнес-процессов с помощью ИИ: обработка обращений, интеграции с 1С и CRM, ИИ-агенты, отчётность и поддержка решений.",
   // Сайт пока прототип. Индексацию включим после подключения заявок,
   // юридических страниц и утверждения коммерческого предложения.
-  robots: { index: false, follow: false },
+  robots: { index: process.env.SITE_READY_FOR_INDEXING === "true", follow: process.env.SITE_READY_FOR_INDEXING === "true" },
 };
 
 const services = [
@@ -101,6 +102,11 @@ function SectionHeading({
 }
 
 export default function Home() {
+  const leadsReady = process.env.LEADS_ENABLED === "true" &&
+    Boolean(process.env.TELEGRAM_BOT_TOKEN && process.env.TELEGRAM_CHAT_ID &&
+      process.env.TURNSTILE_SECRET_KEY && process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY &&
+      process.env.LEGAL_OPERATOR_NAME && process.env.LEGAL_CONTACT_EMAIL && process.env.LEGAL_OPERATOR_ADDRESS);
+
   return (
     <main>
       <section className="relative overflow-hidden bg-white pb-20 pt-36 dark:bg-gray-dark md:pb-28 md:pt-44" id="top">
@@ -299,9 +305,11 @@ export default function Home() {
             <p className="mb-8 text-lg leading-relaxed text-[#c5cee0]">
               Подберём возможные сценарии и определим, какие системы нужно подключить. Финальное решение зависит от технической проверки.
             </p>
-            <div className="rounded-xl border border-[#62749c]/40 bg-white/5 px-6 py-5 text-sm leading-relaxed text-[#c5cee0]">
-              Это тестовая версия сайта. Форма заявок и передача сообщений в CRM пока не подключены; отправка персональных данных здесь недоступна.
-            </div>
+            <LeadForm
+              enabled={leadsReady}
+              siteKey={process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY}
+              metrikaId={process.env.NEXT_PUBLIC_YANDEX_METRIKA_ID}
+            />
           </div>
         </div>
       </section>
