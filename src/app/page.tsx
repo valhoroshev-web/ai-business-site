@@ -1,6 +1,5 @@
 import Link from "next/link";
 import LeadForm from "@/components/LeadForm";
-import ContactMethods from "@/components/ContactMethods";
 import { isLeadFormReady } from "@/lib/lead-config";
 import type { Metadata } from "next";
 
@@ -332,10 +331,9 @@ export default function Home() {
             <p className="mb-4 text-sm font-semibold uppercase tracking-[0.18em] text-[#9ab1ff]">Следующий шаг</p>
             <h2 className="mb-6 text-3xl font-bold leading-tight md:text-4xl">Расскажите, какую работу хотите автоматизировать</h2>
             <p className="mb-8 text-lg leading-relaxed text-[#c5cee0]">
-              Напишите нам напрямую в Telegram или на электронную почту. Укажите, какой процесс
-              хотите автоматизировать и какие системы используете.
+              Опишите задачу через защищённую форму ниже: укажите процесс, используемые системы
+              и удобный способ ответа. Контактные данные получателя на сайте не публикуются.
             </p>
-            <ContactMethods />
             <div className="mt-8">
               <LeadForm
                 enabled={leadsReady}
