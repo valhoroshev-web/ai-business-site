@@ -74,12 +74,36 @@ export default function LeadForm({ enabled, siteKey, metrikaId }: Props) {
 
   if (!enabled || !siteKey) {
     return (
-      <div className="rounded-2xl border border-white/20 bg-white/5 p-7 text-left text-[#d4dcef]">
-        <p className="mb-2 font-semibold text-white">Приём заявок подключается</p>
-        <p className="text-sm leading-relaxed">
-          Форма будет активирована после настройки канала уведомлений,
-          защиты от спама и юридических документов. Пока персональные данные не собираются.
+      <div className="rounded-2xl border border-white/20 bg-white p-6 text-left text-black shadow-xl dark:bg-gray-dark dark:text-white sm:p-8">
+        <h3 className="mb-3 text-xl font-bold">Форма заявки</h3>
+        <p className="mb-6 text-sm leading-relaxed text-gray-600 dark:text-gray-300" role="status">
+          Форма готовится к подключению. Отправка пока отключена — воспользуйтесь
+          Telegram или электронной почтой выше. Поля ниже показаны для ознакомления,
+          данные не собираются.
         </p>
+        <fieldset disabled className="space-y-4 opacity-60" aria-label="Предварительный вид формы: отправка отключена">
+          <div className="grid gap-4 sm:grid-cols-2">
+            <label className="block text-sm font-medium">
+              Имя
+              <input type="text" placeholder="Как к вам обращаться" className="mt-2 w-full rounded-lg border border-gray-300 bg-gray-50 p-3 text-black dark:bg-[#252c3b] dark:text-white" />
+            </label>
+            <label className="block text-sm font-medium">
+              Контакт
+              <input type="text" placeholder="Телефон, email или Telegram" className="mt-2 w-full rounded-lg border border-gray-300 bg-gray-50 p-3 text-black dark:bg-[#252c3b] dark:text-white" />
+            </label>
+          </div>
+          <label className="block text-sm font-medium">
+            Компания
+            <input type="text" placeholder="Необязательно" className="mt-2 w-full rounded-lg border border-gray-300 bg-gray-50 p-3 text-black dark:bg-[#252c3b] dark:text-white" />
+          </label>
+          <label className="block text-sm font-medium">
+            Что хотите автоматизировать?
+            <textarea rows={3} placeholder="Опишите задачу и используемые сервисы" className="mt-2 w-full resize-y rounded-lg border border-gray-300 bg-gray-50 p-3 text-black dark:bg-[#252c3b] dark:text-white" />
+          </label>
+          <button type="button" className="w-full rounded-lg bg-primary px-6 py-4 font-semibold text-white">
+            Отправка пока недоступна
+          </button>
+        </fieldset>
       </div>
     );
   }
@@ -87,8 +111,8 @@ export default function LeadForm({ enabled, siteKey, metrikaId }: Props) {
   if (success) {
     return (
       <div role="status" className="rounded-2xl border border-[#7adabb]/50 bg-[#144d47] p-7 text-left text-white">
-        <h3 className="mb-2 text-xl font-bold">Заявка отправлена</h3>
-        <p className="text-sm leading-relaxed">Ваш запрос передан на рассмотрение. Благодарим за обращение.</p>
+        <h3 className="mb-2 text-xl font-bold">Заявка передана</h3>
+        <p className="text-sm leading-relaxed">Запрос передан в сервис доставки. Если ответа нет, напишите нам напрямую в Telegram или на почту.</p>
         <button type="button" className="mt-5 text-sm font-semibold underline" onClick={() => { setSuccess(false); window.turnstile?.reset(); }}>
           Отправить ещё одну заявку
         </button>
