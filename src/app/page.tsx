@@ -1,7 +1,5 @@
 import Link from "next/link";
-import LeadForm from "@/components/LeadForm";
 import ContactMethods from "@/components/ContactMethods";
-import { isLeadFormReady } from "@/lib/lead-config";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -108,8 +106,6 @@ function SectionHeading({
 }
 
 export default function Home() {
-  const leadsReady = isLeadFormReady();
-
   return (
     <main>
       <section className="relative overflow-hidden bg-white pb-20 pt-36 dark:bg-gray-dark md:pb-28 md:pt-44" id="top">
@@ -336,13 +332,6 @@ export default function Home() {
               нужный способ связи — контакты не показываются до её прохождения.
             </p>
             <ContactMethods />
-            <div className="mt-10">
-              <LeadForm
-                enabled={leadsReady}
-                siteKey={process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY}
-                metrikaId={process.env.NEXT_PUBLIC_YANDEX_METRIKA_ID}
-              />
-            </div>
           </div>
         </div>
       </section>
