@@ -7,6 +7,7 @@ import ThemeToggler from "./ThemeToggler";
 const links = [
   { href: "/#services", label: "Услуги" },
   { href: "/#scenarios", label: "Сценарии" },
+  { href: "/demo", label: "Демо" },
   { href: "/#integrations", label: "Интеграции" },
   { href: "/#process", label: "Этапы работы" },
   { href: "/#faq", label: "Вопросы" },
