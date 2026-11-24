@@ -1,7 +1,7 @@
 "use client";
 
 import Script from "next/script";
-import { FormEvent, useRef, useState } from "react";
+import { FormEvent, useCallback, useEffect, useRef, useState } from "react";
 
 declare global {
   interface Window {
@@ -16,15 +16,56 @@ type Props = {
   metrikaId?: string;
 };
 
+type IconChallenge = {
+  prompt: string;
+  options: { id: string; glyph: string; label: string }[];
+  token: string;
+};
+
 export default function LeadForm({ enabled, siteKey, metrikaId }: Props) {
   const formRef = useRef<HTMLFormElement>(null);
   const [sending, setSending] = useState(false);
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState("");
+  const [iconChallenge, setIconChallenge] = useState<IconChallenge | null>(null);
+  const [selectedIcon, setSelectedIcon] = useState("");
+  const [iconLoading, setIconLoading] = useState(false);
+  const [iconError, setIconError] = useState("");
+
+  const refreshIconChallenge = useCallback(async () => {
+    setIconLoading(true);
+    setSelectedIcon("");
+    setIconError("");
+    setIconChallenge(null);
+
+    try {
+      const response = await fetch("/api/icon-captcha", { cache: "no-store" });
+      if (!response.ok) throw new Error("Иконки временно недоступны.");
+      const data = (await response.json()) as IconChallenge;
+      if (!data.prompt || data.options?.length !== 4 || !data.token) {
+        throw new Error("Некорректный набор иконок.");
+      }
+      setIconChallenge(data);
+    } catch {
+      setIconError("Не удалось загрузить иконки. Нажмите «Другие иконки».");
+    } finally {
+      setIconLoading(false);
+    }
+  }, []);
+
+  useEffect(() => {
+    if (enabled && siteKey) {
+      void refreshIconChallenge();
+    }
+  }, [enabled, siteKey, refreshIconChallenge]);
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     if (sending || !enabled || !formRef.current) return;
+    if (!iconChallenge || !selectedIcon) {
+      setError("Выберите нужную иконку для проверки.");
+      return;
+    }
 
     const form = new FormData(formRef.current);
     const token = form.get("cf-turnstile-response")?.toString() || "";
@@ -49,6 +90,8 @@ export default function LeadForm({ enabled, siteKey, metrikaId }: Props) {
           website: form.get("website"),
           consent: form.get("consent") === "on",
           turnstileToken: token,
+          iconCaptchaToken: iconChallenge.token,
+          iconCaptchaAnswer: selectedIcon,
           utmSource: params.get("utm_source") || sessionStorage.getItem("utm_source") || "",
           utmMedium: params.get("utm_medium") || sessionStorage.getItem("utm_medium") || "",
           utmCampaign: params.get("utm_campaign") || sessionStorage.getItem("utm_campaign") || "",
@@ -59,6 +102,7 @@ export default function LeadForm({ enabled, siteKey, metrikaId }: Props) {
         throw new Error(result.error || "Не удалось отправить заявку.");
       }
       setSuccess(true);
+      setSelectedIcon("");
       formRef.current?.reset();
       const id = Number(metrikaId);
       if (Number.isInteger(id) && id > 0 && typeof window.ym === "function") {
@@ -67,6 +111,7 @@ export default function LeadForm({ enabled, siteKey, metrikaId }: Props) {
     } catch (err) {
       setError(err instanceof Error ? err.message : "Ошибка отправки заявки.");
       window.turnstile?.reset();
+      void refreshIconChallenge();
     } finally {
       setSending(false);
     }
@@ -100,6 +145,15 @@ export default function LeadForm({ enabled, siteKey, metrikaId }: Props) {
             Что хотите автоматизировать?
             <textarea rows={3} placeholder="Опишите задачу и используемые сервисы" className="mt-2 w-full resize-y rounded-lg border border-gray-300 bg-gray-50 p-3 text-black dark:bg-[#252c3b] dark:text-white" />
           </label>
+          <div className="rounded-xl border border-gray-300 p-4 dark:border-white/20">
+            <p className="mb-3 text-sm font-semibold">Проверка по иконкам · пример</p>
+            <p className="mb-3 text-sm">Нажмите на иконку «Ключ»</p>
+            <div className="flex flex-wrap gap-3">
+              {["🔒", "🔑", "⚙️", "⭐"].map((glyph) => (
+                <span key={glyph} className="flex h-14 w-14 items-center justify-center rounded-lg border border-gray-300 text-3xl dark:border-white/20" aria-hidden="true">{glyph}</span>
+              ))}
+            </div>
+          </div>
           <button type="button" className="w-full rounded-lg bg-primary px-6 py-4 font-semibold text-white">
             Отправка пока недоступна
           </button>
@@ -150,6 +204,51 @@ export default function LeadForm({ enabled, siteKey, metrikaId }: Props) {
           <input type="checkbox" name="consent" required className="mt-1 accent-primary" />
           <span>Согласен(на) на обработку указанных данных для ответа на обращение согласно <a href="/privacy" target="_blank" rel="noopener noreferrer" className="text-primary underline">политике конфиденциальности</a>.</span>
         </label>
+        <fieldset className="rounded-xl border border-gray-300 p-4 dark:border-white/20">
+          <legend className="px-2 text-sm font-bold">Проверка по иконкам</legend>
+          {iconLoading ? (
+            <p role="status" className="text-sm text-gray-600 dark:text-gray-300">Загружаем иконки…</p>
+          ) : iconChallenge ? (
+            <>
+              <p className="mb-4 text-sm font-semibold">{iconChallenge.prompt}</p>
+              <div role="group" aria-label="Выберите правильную иконку" className="flex flex-wrap gap-3">
+                {iconChallenge.options.map((option) => (
+                  <button
+                    key={option.id}
+                    type="button"
+                    onClick={() => {
+                      setSelectedIcon(option.id);
+                      setError("");
+                    }}
+                    aria-label={option.label}
+                    aria-pressed={selectedIcon === option.id}
+                    className={
+                      "flex h-16 w-16 items-center justify-center rounded-xl border-2 text-3xl transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-primary " +
+                      (selectedIcon === option.id
+                        ? "border-primary bg-primary/10"
+                        : "border-gray-300 hover:border-primary dark:border-white/20")
+                    }
+                  >
+                    {option.glyph}
+                  </button>
+                ))}
+              </div>
+              <p className="mt-3 text-xs text-gray-500 dark:text-gray-400">
+                Выбранный значок подсвечивается. Набор действует несколько минут.
+              </p>
+            </>
+          ) : (
+            <p role="alert" className="text-sm text-red-600 dark:text-red-400">{iconError}</p>
+          )}
+          <button
+            type="button"
+            onClick={() => void refreshIconChallenge()}
+            disabled={iconLoading}
+            className="mt-4 text-sm font-semibold text-primary hover:underline disabled:opacity-50"
+          >
+            Другие иконки
+          </button>
+        </fieldset>
         <div className="cf-turnstile" data-sitekey={siteKey} data-theme="auto" />
         {error && <p role="alert" className="text-sm font-medium text-red-600 dark:text-red-400">{error}</p>}
         <button disabled={sending} type="submit" className="w-full rounded-lg bg-primary px-6 py-4 font-semibold text-white transition hover:bg-primary/90 disabled:cursor-wait disabled:opacity-60">
