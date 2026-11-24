@@ -36,13 +36,13 @@ export default function Footer() {
           <div className="max-w-xs">
             <h2 className="mb-4 font-semibold text-black dark:text-white">Обратная связь</h2>
             <p className="mb-4 text-sm leading-relaxed text-body-color dark:text-body-color-dark">
-              Напишите нам через форму с проверкой по иконкам и защитой от автоматических обращений.
+              Выберите Telegram или почту, пройдите короткую проверку и получите доступ к нужному контакту.
             </p>
             <Link
               href="/#contact"
               className="inline-block rounded-lg bg-primary px-5 py-3 text-sm font-semibold text-white transition hover:bg-primary/90"
             >
-              Открыть форму
+              Выбрать способ связи
             </Link>
           </div>
         </div>
