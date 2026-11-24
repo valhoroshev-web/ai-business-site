@@ -2,7 +2,7 @@ import Link from "next/link";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Обработка персональных данных | AI Business",
+  title: "Обработка персональных данных | AI PROFI",
   robots: { index: false, follow: false },
 };
 
