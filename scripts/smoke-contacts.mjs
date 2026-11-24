@@ -7,7 +7,7 @@ const port = 43819;
 const origin = "http://127.0.0.1:" + port;
 const expected = {
   telegram: "https://t.me/example_user",
-  email: "mailto:demo@example.com",
+  email: "mailto:demo@example.com?subject=" + encodeURIComponent("Запрос с сайта AI PROFI"),
   yandex: "https://yandex.ru/chat/p/00000000-0000-4000-8000-000000000001?utm_source=invite",
 };
 const child = spawn(process.execPath, ["node_modules/next/dist/bin/next", "start", "-p", String(port), "-H", "127.0.0.1"], {
