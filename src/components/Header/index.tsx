@@ -26,9 +26,9 @@ export default function Header() {
   return (
     <header className={`fixed left-0 top-0 z-50 w-full border-b border-gray-200/40 transition dark:border-white/10 ${sticky || menuOpen ? "bg-white/95 shadow-sticky backdrop-blur-md dark:bg-gray-dark/95" : "bg-white/90 backdrop-blur-sm dark:bg-gray-dark/90"}`}>
       <div className="container flex min-h-20 items-center justify-between gap-4">
-        <Link href="/" className="shrink-0 text-lg font-extrabold tracking-tight text-black dark:text-white sm:text-xl" aria-label="AI Business — главная">
+        <Link href="/" className="shrink-0 text-lg font-extrabold tracking-tight text-black dark:text-white sm:text-xl" aria-label="AI PROFI — главная">
           <span className="mr-2 inline-flex h-9 w-9 items-center justify-center rounded-lg bg-primary text-sm font-bold text-white">AI</span>
-          BUSINESS
+          PROFI
         </Link>
         <nav className="hidden items-center gap-5 xl:gap-7 lg:flex" aria-label="Основное меню">
           {links.map((link) => (
