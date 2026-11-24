@@ -26,7 +26,8 @@ export default function PrivacyPage() {
           <div className="space-y-7 leading-relaxed text-body-color dark:text-body-color-dark">
             <p>
               Оператор персональных данных: <strong className="text-black dark:text-white">{operatorName}</strong>.
-              Адрес: {operatorAddress}. Для вопросов о данных: {operatorEmail}.
+              Адрес: {operatorAddress}. По вопросам обработки данных можно обратиться
+              через <Link href="/#contact" className="font-semibold text-primary underline">защищённую форму обратной связи</Link>.
             </p>
             <section>
               <h2 className="mb-2 text-xl font-semibold text-black dark:text-white">1. Какие данные собираем</h2>
@@ -42,7 +43,7 @@ export default function PrivacyPage() {
             </section>
             <section>
               <h2 className="mb-2 text-xl font-semibold text-black dark:text-white">4. Запросы и удаление</h2>
-              <p>По вопросам обработки данных, исправления сведений, отзыва согласия и удаления информации можно написать на адрес: {operatorEmail}. Данные должны удаляться при прекращении оснований для их обработки в порядке, предусмотренном применимым законодательством.</p>
+              <p>Запросы об исправлении сведений, отзыве согласия и удалении информации можно передать через <Link href="/#contact" className="font-semibold text-primary underline">форму обратной связи</Link>. Данные должны удаляться при прекращении оснований для их обработки в порядке, предусмотренном применимым законодательством.</p>
             </section>
             <p className="rounded-lg border border-gray-200 p-4 text-sm dark:border-white/10">
               Шаблон политики требует отдельной юридической проверки, включая сроки хранения,
