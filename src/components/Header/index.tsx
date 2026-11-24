@@ -64,7 +64,7 @@ export default function Header() {
                 {link.label}
               </Link>
             ))}
-            <Link href="/#scenarios" onClick={() => setMenuOpen(false)} className="mt-2 rounded-lg bg-primary px-4 py-3 text-center font-semibold text-white">Связаться</Link>
+            <Link href="/#contact" onClick={() => setMenuOpen(false)} className="mt-2 rounded-lg bg-primary px-4 py-3 text-center font-semibold text-white">Связаться</Link>
           </div>
         </nav>
       )}
