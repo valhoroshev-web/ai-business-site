@@ -38,7 +38,7 @@ export default function Header() {
           ))}
         </nav>
         <div className="hidden items-center gap-3 lg:flex">
-          <Link href="/#contact" className="rounded-lg bg-primary px-5 py-3 text-sm font-semibold text-white transition hover:bg-primary/90">Обсудить проект</Link>
+          <Link href="/#scenarios" className="rounded-lg bg-primary px-5 py-3 text-sm font-semibold text-white transition hover:bg-primary/90">Примеры решений</Link>
           <ThemeToggler />
         </div>
         <div className="flex items-center gap-2 lg:hidden">
@@ -63,7 +63,7 @@ export default function Header() {
                 {link.label}
               </Link>
             ))}
-            <Link href="/#contact" onClick={() => setMenuOpen(false)} className="mt-2 rounded-lg bg-primary px-4 py-3 text-center font-semibold text-white">Обсудить проект</Link>
+            <Link href="/#scenarios" onClick={() => setMenuOpen(false)} className="mt-2 rounded-lg bg-primary px-4 py-3 text-center font-semibold text-white">Примеры решений</Link>
           </div>
         </nav>
       )}
