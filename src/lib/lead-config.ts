@@ -6,7 +6,7 @@ export type LeadDelivery = "email" | "telegram" | null;
  * This configuration is server-only and must not be imported from client components.
  */
 export function getLeadDelivery(): LeadDelivery {
-  if (process.env.RESEND_API_KEY && process.env.RESEND_FROM_EMAIL) return "email";
+  if (process.env.RESEND_API_KEY && process.env.RESEND_FROM_EMAIL && process.env.RESEND_TO_EMAIL) return "email";
   if (process.env.TELEGRAM_BOT_TOKEN && process.env.TELEGRAM_CHAT_ID) return "telegram";
   return null;
 }
