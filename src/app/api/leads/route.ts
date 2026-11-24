@@ -1,6 +1,5 @@
 import { NextResponse } from "next/server";
 import { getLeadDelivery, isLeadFormReady } from "@/lib/lead-config";
-import { verifyIconAnswer } from "@/lib/icon-captcha";
 
 export const runtime = "nodejs";
 
@@ -12,8 +11,6 @@ type LeadPayload = {
   website?: unknown;
   consent?: unknown;
   turnstileToken?: unknown;
-  iconCaptchaToken?: unknown;
-  iconCaptchaAnswer?: unknown;
   utmSource?: unknown;
   utmMedium?: unknown;
   utmCampaign?: unknown;
@@ -70,8 +67,6 @@ export async function POST(request: Request) {
   const company = getText(payload.company, 120);
   const message = getText(payload.message, 2000);
   const token = getText(payload.turnstileToken, 2200);
-  const iconToken = getText(payload.iconCaptchaToken, 150);
-  const iconAnswer = getText(payload.iconCaptchaAnswer, 40);
   const utmSource = getText(payload.utmSource, 100);
   const utmMedium = getText(payload.utmMedium, 100);
   const utmCampaign = getText(payload.utmCampaign, 100);
@@ -81,9 +76,7 @@ export async function POST(request: Request) {
     contact.length < 5 ||
     message.length < 10 ||
     payload.consent !== true ||
-    !token ||
-    !iconToken ||
-    !iconAnswer
+    !token
   ) {
     return NextResponse.json(
       { error: "Проверьте поля и согласие на обработку данных." },
@@ -114,14 +107,6 @@ export async function POST(request: Request) {
     if (!result.success || (result.hostname && result.hostname !== host.split(":")[0])) {
       return NextResponse.json(
         { error: "Проверка защиты от спама не пройдена. Повторите попытку." },
-        { status: 400 },
-      );
-    }
-
-    // Icon task is additional friction; Turnstile above remains the real bot defense.
-    if (!verifyIconAnswer(iconToken, iconAnswer)) {
-      return NextResponse.json(
-        { error: "Проверка иконок не пройдена или истекло время. Выберите новую иконку." },
         { status: 400 },
       );
     }
