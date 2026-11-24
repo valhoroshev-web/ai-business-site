@@ -1,5 +1,6 @@
 import Link from "next/link";
 import LeadForm from "@/components/LeadForm";
+import ContactMethods from "@/components/ContactMethods";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -149,10 +150,10 @@ export default function Home() {
               </div>
               <div className="flex flex-col gap-3 sm:flex-row">
                 <Link
-                  href={leadsReady ? "#contact" : "#services"}
+                  href="#contact"
                   className="rounded-lg bg-primary px-7 py-4 text-center text-base font-semibold text-white shadow-lg shadow-primary/20 transition hover:bg-primary/90"
                 >
-                  {leadsReady ? "Обсудить автоматизацию" : "Посмотреть услуги"}
+                  Обсудить задачу
                 </Link>
                 <Link
                   href="#scenarios"
@@ -162,9 +163,7 @@ export default function Home() {
                 </Link>
               </div>
               <p className="mt-6 max-w-xl text-sm leading-relaxed text-body-color dark:text-body-color-dark">
-                {leadsReady
-                  ? "Опишите свой процесс — обсудим возможные варианты внедрения."
-                  : "Сайт в подготовке к коммерческому запуску: приём заявок пока отключён."}
+                Напишите в Telegram или на почту — расскажите, какой процесс хотите автоматизировать.
               </p>
             </div>
 
@@ -335,13 +334,19 @@ export default function Home() {
             <p className="mb-4 text-sm font-semibold uppercase tracking-[0.18em] text-[#9ab1ff]">Следующий шаг</p>
             <h2 className="mb-6 text-3xl font-bold leading-tight md:text-4xl">Расскажите, какую работу хотите автоматизировать</h2>
             <p className="mb-8 text-lg leading-relaxed text-[#c5cee0]">
-              Подберём возможные сценарии и определим, какие системы нужно подключить. Финальное решение зависит от технической проверки.
+              Напишите нам напрямую в Telegram или на электронную почту. Укажите, какой процесс
+              хотите автоматизировать и какие системы используете.
             </p>
-            <LeadForm
-              enabled={leadsReady}
-              siteKey={process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY}
-              metrikaId={process.env.NEXT_PUBLIC_YANDEX_METRIKA_ID}
-            />
+            <ContactMethods />
+            {leadsReady && (
+              <div className="mt-8">
+                <LeadForm
+                  enabled={leadsReady}
+                  siteKey={process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY}
+                  metrikaId={process.env.NEXT_PUBLIC_YANDEX_METRIKA_ID}
+                />
+              </div>
+            )}
           </div>
         </div>
       </section>
