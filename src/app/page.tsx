@@ -18,6 +18,7 @@ const services = [
     description:
       "Принимают типовые обращения, уточняют потребности, собирают данные и передают сложные вопросы сотрудникам.",
     tags: ["Заявки", "CRM", "Мессенджеры"],
+    href: "/services/sales-automation",
   },
   {
     number: "02",
@@ -25,6 +26,7 @@ const services = [
     description:
       "Выполняют повторяющиеся операции по заданному сценарию: от обработки писем до подготовки документов и сводок.",
     tags: ["Почта", "Документы", "Контроль"],
+    href: "/services/ai-agents",
   },
   {
     number: "03",
@@ -32,6 +34,7 @@ const services = [
     description:
       "Настраиваем обмен данными между 1С, CRM, таблицами, почтой и внешними сервисами, чтобы убрать повторный ввод.",
     tags: ["1С", "CRM", "API"],
+    href: "/services/1c-crm",
   },
   {
     number: "04",
@@ -39,6 +42,7 @@ const services = [
     description:
       "Собираем показатели из разных источников, формируем отчёты и уведомляем об отклонениях.",
     tags: ["Аналитика", "Отчёты", "Уведомления"],
+    href: "/services/reporting",
   },
   {
     number: "05",
@@ -212,15 +216,24 @@ export default function Home() {
           />
           <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
             {services.map((service) => (
-              <article key={service.number} className="rounded-2xl border border-gray-200 bg-white p-7 shadow-one transition hover:-translate-y-1 hover:shadow-feature-2 dark:border-white/10 dark:bg-gray-dark">
+              <article key={service.number} className="flex h-full flex-col rounded-2xl border border-gray-200 bg-white p-7 shadow-one transition hover:-translate-y-1 hover:shadow-feature-2 dark:border-white/10 dark:bg-gray-dark">
                 <div className="mb-7 flex h-12 w-12 items-center justify-center rounded-xl bg-primary/10 text-lg font-bold text-primary">{service.number}</div>
                 <h3 className="mb-4 text-xl font-bold leading-snug text-black dark:text-white">{service.title}</h3>
-                <p className="mb-6 min-h-24 text-base leading-relaxed text-body-color dark:text-body-color-dark">{service.description}</p>
+                <p className="mb-6 flex-1 text-base leading-relaxed text-body-color dark:text-body-color-dark">{service.description}</p>
                 <div className="flex flex-wrap gap-2">
                   {service.tags.map((tag) => (
                     <span key={tag} className="rounded-full bg-[#EFF3FE] px-3 py-1 text-xs font-medium text-[#4460af] dark:bg-white/10 dark:text-[#bbcafa]">{tag}</span>
                   ))}
                 </div>
+                {"href" in service && service.href ? (
+                  <Link
+                    href={service.href}
+                    className="mt-7 inline-flex items-center gap-2 self-start text-sm font-semibold text-primary hover:underline"
+                    aria-label={"Подробнее: " + service.title}
+                  >
+                    Подробнее об услуге <span aria-hidden="true">→</span>
+                  </Link>
+                ) : null}
               </article>
             ))}
           </div>
