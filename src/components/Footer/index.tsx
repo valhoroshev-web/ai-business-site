@@ -15,7 +15,7 @@ export default function Footer() {
           <div className="max-w-sm">
             <Link href="/" className="text-xl font-extrabold text-black dark:text-white">
               <span className="mr-2 inline-flex h-9 w-9 items-center justify-center rounded-lg bg-primary text-sm font-bold text-white">AI</span>
-              BUSINESS
+              PROFI
             </Link>
             <p className="mt-5 text-sm leading-relaxed text-body-color dark:text-body-color-dark">
               ИИ-агенты, интеграции и автоматизация бизнес-процессов. Проектируем решения под конкретные задачи и ограничения компаний.
@@ -38,7 +38,7 @@ export default function Footer() {
           </div>
         </div>
         <div className="mt-12 border-t border-gray-200 pt-6 text-xs text-body-color dark:border-white/10 dark:text-body-color-dark">
-          AI Business · Демонстрационная версия. Коммерческие условия и юридические документы находятся в разработке.
+          AI PROFI · Демонстрационная версия. Коммерческие условия и юридические документы находятся в разработке.
         </div>
       </div>
     </footer>
