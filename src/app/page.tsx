@@ -1,6 +1,7 @@
 import Link from "next/link";
 import LeadForm from "@/components/LeadForm";
 import ContactMethods from "@/components/ContactMethods";
+import { isLeadFormReady } from "@/lib/lead-config";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -107,10 +108,7 @@ function SectionHeading({
 }
 
 export default function Home() {
-  const leadsReady = process.env.LEADS_ENABLED === "true" &&
-    Boolean(process.env.TELEGRAM_BOT_TOKEN && process.env.TELEGRAM_CHAT_ID &&
-      process.env.TURNSTILE_SECRET_KEY && process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY &&
-      process.env.LEGAL_OPERATOR_NAME && process.env.LEGAL_CONTACT_EMAIL && process.env.LEGAL_OPERATOR_ADDRESS);
+  const leadsReady = isLeadFormReady();
 
   return (
     <main>
@@ -338,15 +336,13 @@ export default function Home() {
               хотите автоматизировать и какие системы используете.
             </p>
             <ContactMethods />
-            {leadsReady && (
-              <div className="mt-8">
-                <LeadForm
-                  enabled={leadsReady}
-                  siteKey={process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY}
-                  metrikaId={process.env.NEXT_PUBLIC_YANDEX_METRIKA_ID}
-                />
-              </div>
-            )}
+            <div className="mt-8">
+              <LeadForm
+                enabled={leadsReady}
+                siteKey={process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY}
+                metrikaId={process.env.NEXT_PUBLIC_YANDEX_METRIKA_ID}
+              />
+            </div>
           </div>
         </div>
       </section>
