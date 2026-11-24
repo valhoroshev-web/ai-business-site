@@ -2,13 +2,14 @@
 
 import { FormEvent, useEffect, useRef, useState } from "react";
 
-type Channel = "telegram" | "email";
+type Channel = "telegram" | "email" | "yandex";
 type Challenge = { question: string; token: string };
 type Reveal = { url: string; address: string };
 
 const channels = [
   { key: "telegram" as const, label: "Telegram", caption: "Перейти в чат после проверки" },
   { key: "email" as const, label: "Электронная почта", caption: "Открыть адрес после проверки" },
+  { key: "yandex" as const, label: "Яндекс Мессенджер", caption: "Личный чат в Яндекс Телемосте" },
 ];
 
 function ChannelIcon({ channel }: { channel: Channel }) {
@@ -16,6 +17,14 @@ function ChannelIcon({ channel }: { channel: Channel }) {
     return (
       <svg aria-hidden="true" viewBox="0 0 24 24" width="34" height="34" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round">
         <path d="m21.5 2.5-5 19-5.3-6-3.5 2.4.7-5.6 13.1-9.8L3 10.7l8.2 4.8" />
+      </svg>
+    );
+  }
+  if (channel === "yandex") {
+    return (
+      <svg aria-hidden="true" viewBox="0 0 24 24" width="34" height="34" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round">
+        <rect x="3" y="4" width="18" height="14" rx="4" />
+        <path d="M8 18v3l4-3M8 9h8M8 13h5" />
       </svg>
     );
   }
@@ -27,7 +36,7 @@ function ChannelIcon({ channel }: { channel: Channel }) {
   );
 }
 
-export default function ContactMethods({ compact = false }: { compact?: boolean }) {
+export default function ContactMethods({ compact = false, yandexEnabled = false }: { compact?: boolean; yandexEnabled?: boolean }) {
   const [channel, setChannel] = useState<Channel | null>(null);
   const [challenge, setChallenge] = useState<Challenge | null>(null);
   const [answer, setAnswer] = useState("");
@@ -97,7 +106,7 @@ export default function ContactMethods({ compact = false }: { compact?: boolean 
       if (!response.ok || !data.url || !data.address) throw new Error(data.error || "Проверка не пройдена.");
       if (activeRequest.current === id) {
         setRevealed({ url: data.url, address: data.address });
-        if (channel === "telegram") window.location.assign(data.url);
+        if (channel === "telegram" || channel === "yandex") window.location.assign(data.url);
       }
     } catch (err) {
       if (activeRequest.current === id) setError(err instanceof Error ? err.message : "Проверка не пройдена.");
@@ -108,13 +117,14 @@ export default function ContactMethods({ compact = false }: { compact?: boolean 
 
   return (
     <div>
-      <div className={compact ? "flex flex-wrap gap-3" : "grid gap-4 sm:grid-cols-2"}>
+      <div className={compact ? "flex flex-wrap gap-3" : "grid gap-4 sm:grid-cols-2 xl:grid-cols-3"}>
         {channels.map((item) => (
           <button
             key={item.key}
             type="button"
             onClick={() => void loadChallenge(item.key)}
-            className={compact ? "group flex items-center gap-3 rounded-xl border border-gray-200 bg-white p-3 text-left text-black transition hover:border-primary dark:border-white/20 dark:bg-[#242c3a] dark:text-white" : "group flex items-center gap-5 rounded-2xl border border-white/20 bg-white p-6 text-left text-black transition hover:-translate-y-0.5 hover:border-primary hover:shadow-lg dark:bg-[#242c3a] dark:text-white"}
+            disabled={item.key === "yandex" && !yandexEnabled}
+            className={compact ? "group flex items-center gap-3 rounded-xl border border-gray-200 bg-white p-3 text-left text-black transition hover:border-primary disabled:cursor-not-allowed disabled:opacity-55 dark:border-white/20 dark:bg-[#242c3a] dark:text-white" : "group flex items-center gap-5 rounded-2xl border border-white/20 bg-white p-6 text-left text-black transition hover:-translate-y-0.5 hover:border-primary hover:shadow-lg disabled:cursor-not-allowed disabled:opacity-55 disabled:hover:translate-y-0 dark:bg-[#242c3a] dark:text-white"}
             aria-label={"Открыть " + item.label + " после проверки"}
           >
             <span className={compact ? "flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-primary/10 text-primary group-hover:bg-primary/20 [&_svg]:h-6 [&_svg]:w-6" : "flex h-16 w-16 shrink-0 items-center justify-center rounded-2xl bg-primary/10 text-primary group-hover:bg-primary/20"}>
@@ -122,18 +132,19 @@ export default function ContactMethods({ compact = false }: { compact?: boolean 
             </span>
             <span>
               <span className={compact ? "block text-sm font-bold" : "block text-lg font-bold"}>{item.label}</span>
-              {!compact && <span className="mt-2 block text-sm leading-relaxed text-gray-600 dark:text-gray-300">{item.caption}</span>}
+              {!compact && <span className="mt-2 block text-sm leading-relaxed text-gray-600 dark:text-gray-300">{item.key === "yandex" && !yandexEnabled ? "Ссылка на чат подключается" : item.caption}</span>}
+              {compact && item.key === "yandex" && !yandexEnabled && <span className="block text-xs text-gray-500">Скоро</span>}
             </span>
           </button>
         ))}
       </div>
 
       {channel && (
-        <div role="dialog" aria-modal="true" aria-label={"Проверка для " + (channel === "telegram" ? "Telegram" : "электронной почты")} className="fixed inset-0 z-[100] flex items-center justify-center bg-black/70 p-4" onClick={close}>
+        <div role="dialog" aria-modal="true" aria-label={"Проверка для " + (channel === "telegram" ? "Telegram" : channel === "yandex" ? "Яндекс Мессенджера" : "электронной почты")} className="fixed inset-0 z-[100] flex items-center justify-center bg-black/70 p-4" onClick={close}>
           <div ref={dialogRef} tabIndex={-1} className="w-full max-w-md rounded-2xl bg-white p-6 text-left text-black shadow-2xl outline-none dark:bg-[#242c3a] dark:text-white sm:p-8" onClick={(event) => event.stopPropagation()}>
             <div className="mb-6 flex items-start justify-between gap-4">
               <div>
-                <h3 className="text-xl font-bold">{channel === "telegram" ? "Открыть Telegram" : "Связаться по почте"}</h3>
+                <h3 className="text-xl font-bold">{channel === "telegram" ? "Открыть Telegram" : channel === "yandex" ? "Открыть Яндекс Мессенджер" : "Связаться по почте"}</h3>
                 <p className="mt-2 text-sm text-gray-600 dark:text-gray-300">Пройдите простую проверку, чтобы открыть контакт.</p>
               </div>
               <button type="button" onClick={close} aria-label="Закрыть" className="rounded-lg p-2 text-gray-500 hover:bg-gray-100 dark:hover:bg-white/10">✕</button>
@@ -145,8 +156,8 @@ export default function ContactMethods({ compact = false }: { compact?: boolean 
                 {channel === "email" && (
                   <p className="break-all text-sm">Адрес: <span className="font-semibold">{revealed.address}</span></p>
                 )}
-                <a href={revealed.url} target={channel === "telegram" ? "_blank" : undefined} rel={channel === "telegram" ? "noopener noreferrer" : undefined} className="inline-flex w-full justify-center rounded-lg bg-primary px-6 py-4 font-semibold text-white hover:bg-primary/90">
-                  {channel === "telegram" ? "Перейти в Telegram" : "Написать письмо"}
+                <a href={revealed.url} target={channel !== "email" ? "_blank" : undefined} rel={channel !== "email" ? "noopener noreferrer" : undefined} className="inline-flex w-full justify-center rounded-lg bg-primary px-6 py-4 font-semibold text-white hover:bg-primary/90">
+                  {channel === "telegram" ? "Перейти в Telegram" : channel === "yandex" ? "Перейти в Яндекс Телемост" : "Написать письмо"}
                 </a>
                 {channel === "email" && <p className="text-xs text-gray-600 dark:text-gray-300">Откроется установленное почтовое приложение.</p>}
               </div>
