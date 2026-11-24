@@ -34,18 +34,16 @@ export default function Footer() {
             </nav>
           </div>
           <div className="max-w-xs">
-            <h2 className="mb-4 font-semibold text-black dark:text-white">Связаться</h2>
-            <div className="flex flex-col items-start gap-3 text-sm">
-              <a href="https://t.me/valeryhor" target="_blank" rel="noopener noreferrer" className="font-semibold text-primary hover:underline">
-                Telegram: @valeryhor
-              </a>
-              <a href="mailto:valhoroshev@gmail.com" className="break-all font-semibold text-primary hover:underline">
-                valhoroshev@gmail.com
-              </a>
-              <Link href="/#contact" className="text-body-color hover:text-primary dark:text-body-color-dark">
-                Все способы связи
-              </Link>
-            </div>
+            <h2 className="mb-4 font-semibold text-black dark:text-white">Обратная связь</h2>
+            <p className="mb-4 text-sm leading-relaxed text-body-color dark:text-body-color-dark">
+              Напишите нам через форму с проверкой по иконкам и защитой от автоматических обращений.
+            </p>
+            <Link
+              href="/#contact"
+              className="inline-block rounded-lg bg-primary px-5 py-3 text-sm font-semibold text-white transition hover:bg-primary/90"
+            >
+              Открыть форму
+            </Link>
           </div>
         </div>
         <div className="mt-12 border-t border-gray-200 pt-6 text-xs text-body-color dark:border-white/10 dark:text-body-color-dark">
