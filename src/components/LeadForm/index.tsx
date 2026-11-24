@@ -59,7 +59,7 @@ export default function LeadForm({ enabled, siteKey, metrikaId }: Props) {
         throw new Error(result.error || "Не удалось отправить заявку.");
       }
       setSuccess(true);
-      formRef.current.reset();
+      formRef.current?.reset();
       const id = Number(metrikaId);
       if (Number.isInteger(id) && id > 0 && typeof window.ym === "function") {
         window.ym(id, "reachGoal", "lead_submitted");
