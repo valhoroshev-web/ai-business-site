@@ -38,18 +38,6 @@ export default async function ServicePage({ params }: ServicePageProps) {
   const service = getServiceDetail(slug);
   if (!service) notFound();
 
-  const leadsReady =
-    process.env.LEADS_ENABLED === "true" &&
-    Boolean(
-      process.env.TELEGRAM_BOT_TOKEN &&
-        process.env.TELEGRAM_CHAT_ID &&
-        process.env.TURNSTILE_SECRET_KEY &&
-        process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY &&
-        process.env.LEGAL_OPERATOR_NAME &&
-        process.env.LEGAL_CONTACT_EMAIL &&
-        process.env.LEGAL_OPERATOR_ADDRESS,
-    );
-
   const related = serviceSlugs
     .filter((item) => item !== slug)
     .map((item) => getServiceDetail(item))
@@ -80,10 +68,10 @@ export default async function ServicePage({ params }: ServicePageProps) {
               </p>
               <div className="flex flex-col gap-3 sm:flex-row">
                 <Link
-                  href={leadsReady ? "/#contact" : "/#process"}
+                  href="/#contact"
                   className="rounded-lg bg-primary px-7 py-4 text-center text-base font-semibold text-white transition hover:bg-primary/90"
                 >
-                  {leadsReady ? "Обсудить задачу" : "Как проходит внедрение"}
+                  Связаться по проекту
                 </Link>
                 <Link
                   href="#tasks"
@@ -92,11 +80,9 @@ export default async function ServicePage({ params }: ServicePageProps) {
                   Примеры задач
                 </Link>
               </div>
-              {!leadsReady && (
-                <p className="mt-5 text-sm text-body-color dark:text-body-color-dark">
-                  Приём заявок на сайте пока не подключён.
-                </p>
-              )}
+              <p className="mt-5 text-sm text-body-color dark:text-body-color-dark">
+                Для связи доступны Telegram и электронная почта.
+              </p>
             </div>
             <div className="rounded-3xl border border-gray-200 bg-[#F7F9FF] p-7 shadow-one dark:border-white/10 dark:bg-[#171c28] sm:p-9">
               <p className="mb-4 text-sm font-semibold uppercase tracking-[0.14em] text-primary">Для кого</p>
@@ -229,10 +215,10 @@ export default async function ServicePage({ params }: ServicePageProps) {
               решаем, нужен ли пилот и какие интеграции потребуются.
             </p>
             <Link
-              href={leadsReady ? "/#contact" : "/#process"}
+              href="/#contact"
               className="inline-block rounded-lg bg-primary px-8 py-4 font-semibold text-white transition hover:bg-primary/90"
             >
-              {leadsReady ? "Оставить заявку на обсуждение" : "Посмотреть этапы внедрения"}
+              Написать нам
             </Link>
           </div>
         </div>

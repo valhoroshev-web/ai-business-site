@@ -10,6 +10,7 @@ const links = [
   { href: "/#integrations", label: "Интеграции" },
   { href: "/#process", label: "Этапы работы" },
   { href: "/#faq", label: "Вопросы" },
+  { href: "/#contact", label: "Контакты" },
 ];
 
 export default function Header() {
@@ -38,7 +39,7 @@ export default function Header() {
           ))}
         </nav>
         <div className="hidden items-center gap-3 lg:flex">
-          <Link href="/#scenarios" className="rounded-lg bg-primary px-5 py-3 text-sm font-semibold text-white transition hover:bg-primary/90">Примеры решений</Link>
+          <Link href="/#contact" className="rounded-lg bg-primary px-5 py-3 text-sm font-semibold text-white transition hover:bg-primary/90">Связаться</Link>
           <ThemeToggler />
         </div>
         <div className="flex items-center gap-2 lg:hidden">
@@ -63,7 +64,7 @@ export default function Header() {
                 {link.label}
               </Link>
             ))}
-            <Link href="/#scenarios" onClick={() => setMenuOpen(false)} className="mt-2 rounded-lg bg-primary px-4 py-3 text-center font-semibold text-white">Примеры решений</Link>
+            <Link href="/#scenarios" onClick={() => setMenuOpen(false)} className="mt-2 rounded-lg bg-primary px-4 py-3 text-center font-semibold text-white">Связаться</Link>
           </div>
         </nav>
       )}

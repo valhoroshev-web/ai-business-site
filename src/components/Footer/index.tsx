@@ -35,10 +35,17 @@ export default function Footer() {
           </div>
           <div className="max-w-xs">
             <h2 className="mb-4 font-semibold text-black dark:text-white">Связаться</h2>
-            <p className="text-sm leading-relaxed text-body-color dark:text-body-color-dark">
-              Канал связи и приём заявок подключаются. Пока сайт работает в режиме демонстрации.
-            </p>
-            <Link href="/#contact" className="mt-4 inline-block text-sm font-semibold text-primary hover:underline">Подробнее о консультации</Link>
+            <div className="flex flex-col items-start gap-3 text-sm">
+              <a href="https://t.me/valeryhor" target="_blank" rel="noopener noreferrer" className="font-semibold text-primary hover:underline">
+                Telegram: @valeryhor
+              </a>
+              <a href="mailto:valhoroshev@gmail.com" className="break-all font-semibold text-primary hover:underline">
+                valhoroshev@gmail.com
+              </a>
+              <Link href="/#contact" className="text-body-color hover:text-primary dark:text-body-color-dark">
+                Все способы связи
+              </Link>
+            </div>
           </div>
         </div>
         <div className="mt-12 border-t border-gray-200 pt-6 text-xs text-body-color dark:border-white/10 dark:text-body-color-dark">
