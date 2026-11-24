@@ -14,6 +14,7 @@ export function getLeadDelivery(): LeadDelivery {
 export function isLeadFormReady(): boolean {
   return (
     process.env.LEADS_ENABLED === "true" &&
+    process.env.LEGAL_POLICY_APPROVED === "true" &&
     Boolean(
       getLeadDelivery() &&
         process.env.TURNSTILE_SECRET_KEY &&
