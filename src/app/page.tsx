@@ -3,7 +3,7 @@ import LeadForm from "@/components/LeadForm";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "ИИ-автоматизация бизнеса, ИИ-агенты и интеграции | AI Business",
+  title: "ИИ-автоматизация бизнеса, ИИ-агенты и интеграции | AI PROFI",
   description:
     "Автоматизация бизнес-процессов с помощью ИИ: обработка обращений, интеграции с 1С и CRM, ИИ-агенты, отчётность и поддержка решений.",
   // Сайт пока прототип. Индексацию включим после подключения заявок,
@@ -117,7 +117,7 @@ export default function Home() {
             <div>
               <div className="mb-7 inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary/5 px-4 py-2 text-sm font-medium text-primary">
                 <span className="h-2 w-2 rounded-full bg-primary" />
-                ИИ-решения для бизнеса
+                AI PROFI · ИИ-решения для бизнеса
               </div>
               <h1 className="mb-7 text-4xl font-extrabold leading-[1.12] tracking-tight text-black dark:text-white sm:text-5xl xl:text-6xl">
                 Освободим команду от рутины с помощью <span className="text-primary">искусственного интеллекта</span>
