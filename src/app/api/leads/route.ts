@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { getLeadDelivery, isLeadFormReady } from "@/lib/lead-config";
 
 export const runtime = "nodejs";
 
@@ -18,17 +19,8 @@ type LeadPayload = {
 const getText = (value: unknown, maxLength: number) =>
   typeof value === "string" ? value.trim().slice(0, maxLength) : "";
 
-const configured = () =>
-  process.env.LEADS_ENABLED === "true" &&
-  Boolean(
-    process.env.TELEGRAM_BOT_TOKEN &&
-      process.env.TELEGRAM_CHAT_ID &&
-      process.env.TURNSTILE_SECRET_KEY &&
-      process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY,
-  );
-
 export async function POST(request: Request) {
-  if (!configured()) {
+  if (!isLeadFormReady()) {
     return NextResponse.json(
       { error: "Приём заявок временно недоступен." },
       { status: 503 },
@@ -38,7 +30,11 @@ export async function POST(request: Request) {
   // Защищаем форму от отправки с посторонних сайтов.
   const origin = request.headers.get("origin");
   const host = request.headers.get("host");
-  if (!origin || !host || new URL(origin).host !== host) {
+  try {
+    if (!origin || !host || new URL(origin).host !== host) {
+      return NextResponse.json({ error: "Некорректный источник запроса." }, { status: 403 });
+    }
+  } catch {
     return NextResponse.json({ error: "Некорректный источник запроса." }, { status: 403 });
   }
 
@@ -127,6 +123,36 @@ export async function POST(request: Request) {
       "Время: " + new Date().toISOString(),
     ];
 
+    // Resend sends an email to the operator's inbox; the visitor's address
+    // is only used as Reply-To when it looks like a valid email address.
+    if (getLeadDelivery() === "email") {
+      const replyTo = /^[^\\s@<>\\r\\n]+@[^\\s@<>\\r\\n]+\\.[^\\s@<>\\r\\n]+$/.test(contact)
+        ? { reply_to: contact }
+        : {};
+      const sentEmail = await fetch("https://api.resend.com/emails", {
+        method: "POST",
+        headers: {
+          Authorization: "Bearer " + process.env.RESEND_API_KEY,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          from: process.env.RESEND_FROM_EMAIL,
+          to: [process.env.RESEND_TO_EMAIL || "valhoroshev@gmail.com"],
+          subject: "Новая заявка с сайта AI PROFI",
+          text: lines.join("\\n"),
+          ...replyTo,
+        }),
+        signal: AbortSignal.timeout(9000),
+        cache: "no-store",
+      });
+      const emailResult = (await sentEmail.json()) as { id?: string };
+      if (!sentEmail.ok || !emailResult.id) {
+        throw new Error("Email provider rejected the request");
+      }
+      return NextResponse.json({ ok: true }, { status: 200 });
+    }
+
+    // Existing Telegram bot delivery is an optional alternative.
     const sent = await fetch(
       "https://api.telegram.org/bot" + process.env.TELEGRAM_BOT_TOKEN + "/sendMessage",
       {
@@ -149,7 +175,7 @@ export async function POST(request: Request) {
   } catch {
     // Не подтверждаем приём, если отправка сообщения не состоялась.
     return NextResponse.json(
-      { error: "Не удалось отправить заявку. Повторите попытку позднее." },
+      { error: "Не удалось передать заявку. Попробуйте позже или напишите нам напрямую." },
       { status: 502 },
     );
   }
