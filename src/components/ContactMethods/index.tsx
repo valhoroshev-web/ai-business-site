@@ -27,7 +27,7 @@ function ChannelIcon({ channel }: { channel: Channel }) {
   );
 }
 
-export default function ContactMethods() {
+export default function ContactMethods({ compact = false }: { compact?: boolean }) {
   const [channel, setChannel] = useState<Channel | null>(null);
   const [challenge, setChallenge] = useState<Challenge | null>(null);
   const [answer, setAnswer] = useState("");
@@ -95,7 +95,10 @@ export default function ContactMethods() {
       });
       const data = (await response.json()) as { url?: string; address?: string; error?: string };
       if (!response.ok || !data.url || !data.address) throw new Error(data.error || "Проверка не пройдена.");
-      if (activeRequest.current === id) setRevealed({ url: data.url, address: data.address });
+      if (activeRequest.current === id) {
+        setRevealed({ url: data.url, address: data.address });
+        if (channel === "telegram") window.location.assign(data.url);
+      }
     } catch (err) {
       if (activeRequest.current === id) setError(err instanceof Error ? err.message : "Проверка не пройдена.");
     } finally {
@@ -105,21 +108,21 @@ export default function ContactMethods() {
 
   return (
     <div>
-      <div className="grid gap-4 sm:grid-cols-2">
+      <div className={compact ? "flex flex-wrap gap-3" : "grid gap-4 sm:grid-cols-2"}>
         {channels.map((item) => (
           <button
             key={item.key}
             type="button"
             onClick={() => void loadChallenge(item.key)}
-            className="group flex items-center gap-5 rounded-2xl border border-white/20 bg-white p-6 text-left text-black transition hover:-translate-y-0.5 hover:border-primary hover:shadow-lg dark:bg-[#242c3a] dark:text-white"
+            className={compact ? "group flex items-center gap-3 rounded-xl border border-gray-200 bg-white p-3 text-left text-black transition hover:border-primary dark:border-white/20 dark:bg-[#242c3a] dark:text-white" : "group flex items-center gap-5 rounded-2xl border border-white/20 bg-white p-6 text-left text-black transition hover:-translate-y-0.5 hover:border-primary hover:shadow-lg dark:bg-[#242c3a] dark:text-white"}
             aria-label={"Открыть " + item.label + " после проверки"}
           >
-            <span className="flex h-16 w-16 shrink-0 items-center justify-center rounded-2xl bg-primary/10 text-primary group-hover:bg-primary/20">
+            <span className={compact ? "flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-primary/10 text-primary group-hover:bg-primary/20 [&_svg]:h-6 [&_svg]:w-6" : "flex h-16 w-16 shrink-0 items-center justify-center rounded-2xl bg-primary/10 text-primary group-hover:bg-primary/20"}>
               <ChannelIcon channel={item.key} />
             </span>
             <span>
-              <span className="block text-lg font-bold">{item.label}</span>
-              <span className="mt-2 block text-sm leading-relaxed text-gray-600 dark:text-gray-300">{item.caption}</span>
+              <span className={compact ? "block text-sm font-bold" : "block text-lg font-bold"}>{item.label}</span>
+              {!compact && <span className="mt-2 block text-sm leading-relaxed text-gray-600 dark:text-gray-300">{item.caption}</span>}
             </span>
           </button>
         ))}
