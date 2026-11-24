@@ -38,18 +38,6 @@ export default async function ServicePage({ params }: ServicePageProps) {
   const service = getServiceDetail(slug);
   if (!service) notFound();
 
-  const leadsReady =
-    process.env.LEADS_ENABLED === "true" &&
-    Boolean(
-      process.env.TELEGRAM_BOT_TOKEN &&
-        process.env.TELEGRAM_CHAT_ID &&
-        process.env.TURNSTILE_SECRET_KEY &&
-        process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY &&
-        process.env.LEGAL_OPERATOR_NAME &&
-        process.env.LEGAL_CONTACT_EMAIL &&
-        process.env.LEGAL_OPERATOR_ADDRESS,
-    );
-
   const related = serviceSlugs
     .filter((item) => item !== slug)
     .map((item) => getServiceDetail(item))
