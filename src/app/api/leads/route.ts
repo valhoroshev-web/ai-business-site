@@ -126,7 +126,7 @@ export async function POST(request: Request) {
     // Resend sends an email to the operator's inbox; the visitor's address
     // is only used as Reply-To when it looks like a valid email address.
     if (getLeadDelivery() === "email") {
-      const replyTo = /^[^\\s@<>\\r\\n]+@[^\\s@<>\\r\\n]+\\.[^\\s@<>\\r\\n]+$/.test(contact)
+      const replyTo = /^[^\s@<>\r\n]+@[^\s@<>\r\n]+\.[^\s@<>\r\n]+$/.test(contact)
         ? { reply_to: contact }
         : {};
       const sentEmail = await fetch("https://api.resend.com/emails", {
@@ -139,7 +139,7 @@ export async function POST(request: Request) {
           from: process.env.RESEND_FROM_EMAIL,
           to: [process.env.RESEND_TO_EMAIL || "valhoroshev@gmail.com"],
           subject: "Новая заявка с сайта AI PROFI",
-          text: lines.join("\\n"),
+          text: lines.join("\n"),
           ...replyTo,
         }),
         signal: AbortSignal.timeout(9000),
