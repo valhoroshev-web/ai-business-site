@@ -1,4 +1,5 @@
 import Link from "next/link";
+import ContactMethods from "@/components/ContactMethods";
 
 const footerLinks = [
   { href: "/#services", label: "Услуги" },
@@ -38,12 +39,7 @@ export default function Footer() {
             <p className="mb-4 text-sm leading-relaxed text-body-color dark:text-body-color-dark">
               Выберите Telegram или почту, пройдите короткую проверку и получите доступ к нужному контакту.
             </p>
-            <Link
-              href="/#contact"
-              className="inline-block rounded-lg bg-primary px-5 py-3 text-sm font-semibold text-white transition hover:bg-primary/90"
-            >
-              Выбрать способ связи
-            </Link>
+            <ContactMethods compact />
           </div>
         </div>
         <div className="mt-12 border-t border-gray-200 pt-6 text-xs text-body-color dark:border-white/10 dark:text-body-color-dark">
