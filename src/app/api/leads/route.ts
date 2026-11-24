@@ -116,7 +116,7 @@ export async function POST(request: Request) {
     }
 
     const lines = [
-      "Новая заявка с сайта AI Business",
+      "Новая заявка с сайта AI PROFI",
       "Имя: " + name,
       "Контакт: " + contact,
       "Компания: " + (company || "не указана"),

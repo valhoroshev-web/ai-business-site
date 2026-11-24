@@ -1,6 +1,6 @@
-# AI Business
+# AI PROFI
 
-Коммерческий сайт услуг ИИ-автоматизации бизнеса на базе открытого шаблона [Startup — Next.js](https://github.com/NextJSTemplates/startup-nextjs).
+Коммерческий сайт AI PROFI — услуги ИИ-автоматизации бизнеса на базе открытого шаблона [Startup — Next.js](https://github.com/NextJSTemplates/startup-nextjs).
 
 ## Текущее содержание
 

@@ -13,13 +13,16 @@ const indexable = process.env.SITE_READY_FOR_INDEXING === "true";
 
 export const metadata: Metadata = {
   metadataBase: new URL(site),
-  title: "AI Business — ИИ-автоматизация для бизнеса",
+  title: "AI PROFI — ИИ-автоматизация для бизнеса",
   description:
     "Внедрение ИИ-агентов, обработка заявок, интеграции с 1С и CRM и автоматизация рутинных бизнес-процессов.",
+  applicationName: "AI PROFI",
+  icons: { icon: "/icon.svg" },
   openGraph: {
-    title: "AI Business — ИИ-автоматизация для бизнеса",
+    title: "AI PROFI — ИИ-автоматизация для бизнеса",
     description:
       "ИИ-агенты, интеграции и автоматизация процессов под конкретные задачи бизнеса.",
+    siteName: "AI PROFI",
     type: "website",
     locale: "ru_RU",
     url: "/",
