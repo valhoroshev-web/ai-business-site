@@ -5,6 +5,7 @@ const footerLinks = [
   { href: "/#services", label: "Услуги" },
   { href: "/#integrations", label: "Интеграции" },
   { href: "/#process", label: "Этапы" },
+  { href: "/demo", label: "Демонстрации" },
   { href: "/#faq", label: "Вопросы" },
   { href: "/services/ai-agents", label: "ИИ-агенты" },
   { href: "/services/1c-crm", label: "1С и CRM" },
