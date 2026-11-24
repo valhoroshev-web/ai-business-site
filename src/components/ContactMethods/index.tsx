@@ -1,6 +1,7 @@
 "use client";
 
 import { FormEvent, useEffect, useRef, useState } from "react";
+import { trackGoal } from "@/components/Analytics/track";
 
 type Channel = "telegram" | "email" | "yandex";
 type Challenge = { question: string; token: string };
@@ -48,6 +49,7 @@ export default function ContactMethods({ compact = false, yandexEnabled = false 
   const answerRef = useRef<HTMLInputElement>(null);
 
   async function loadChallenge(selected: Channel) {
+    trackGoal("contact_open", { channel: selected });
     const id = ++activeRequest.current;
     setChannel(selected);
     setChallenge(null);
@@ -106,7 +108,11 @@ export default function ContactMethods({ compact = false, yandexEnabled = false 
       if (!response.ok || !data.url || !data.address) throw new Error(data.error || "Проверка не пройдена.");
       if (activeRequest.current === id) {
         setRevealed({ url: data.url, address: data.address });
-        if (channel === "telegram" || channel === "yandex") window.location.assign(data.url);
+        trackGoal("contact_verified", { channel });
+        if (channel === "telegram" || channel === "yandex") {
+          trackGoal("contact_click", { channel });
+          window.location.assign(data.url);
+        }
       }
     } catch (err) {
       if (activeRequest.current === id) setError(err instanceof Error ? err.message : "Проверка не пройдена.");
@@ -156,7 +162,7 @@ export default function ContactMethods({ compact = false, yandexEnabled = false 
                 {channel === "email" && (
                   <p className="break-all text-sm">Адрес: <span className="font-semibold">{revealed.address}</span></p>
                 )}
-                <a href={revealed.url} target={channel !== "email" ? "_blank" : undefined} rel={channel !== "email" ? "noopener noreferrer" : undefined} className="inline-flex w-full justify-center rounded-lg bg-primary px-6 py-4 font-semibold text-white hover:bg-primary/90">
+                <a href={revealed.url} onClick={() => trackGoal("contact_click", { channel })} target={channel !== "email" ? "_blank" : undefined} rel={channel !== "email" ? "noopener noreferrer" : undefined} className="inline-flex w-full justify-center rounded-lg bg-primary px-6 py-4 font-semibold text-white hover:bg-primary/90">
                   {channel === "telegram" ? "Перейти в Telegram" : channel === "yandex" ? "Перейти в Яндекс Телемост" : "Написать письмо"}
                 </a>
                 {channel === "email" && <p className="text-xs text-gray-600 dark:text-gray-300">Откроется установленное почтовое приложение.</p>}

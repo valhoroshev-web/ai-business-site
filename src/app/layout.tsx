@@ -8,7 +8,7 @@ import "../styles/index.css";
 import { Providers } from "./providers";
 
 const inter = Inter({ subsets: ["latin", "cyrillic"] });
-const site = process.env.NEXT_PUBLIC_SITE_URL || "https://ai-business-site-tau.vercel.app";
+const site = process.env.NEXT_PUBLIC_SITE_URL || "https://ai-profi.pro";
 const indexable = process.env.SITE_READY_FOR_INDEXING === "true";
 
 export const metadata: Metadata = {
@@ -17,6 +17,11 @@ export const metadata: Metadata = {
   description:
     "Внедрение ИИ-агентов, обработка заявок, интеграции с 1С и CRM и автоматизация рутинных бизнес-процессов.",
   applicationName: "AI PROFI",
+  alternates: { canonical: "/" },
+  verification: {
+    google: process.env.GOOGLE_SITE_VERIFICATION,
+    yandex: process.env.YANDEX_SITE_VERIFICATION,
+  },
   icons: { icon: "/icon.svg" },
   openGraph: {
     title: "AI PROFI — ИИ-автоматизация для бизнеса",

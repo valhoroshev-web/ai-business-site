@@ -2,6 +2,7 @@ import Link from "next/link";
 import ContactMethods from "@/components/ContactMethods";
 
 const footerLinks = [
+  { href: "/use-cases", label: "Каталог решений" },
   { href: "/#services", label: "Услуги" },
   { href: "/#integrations", label: "Интеграции" },
   { href: "/#process", label: "Этапы" },
@@ -24,7 +25,7 @@ export default function Footer() {
               PROFI
             </Link>
             <p className="mt-5 text-sm leading-relaxed text-body-color dark:text-body-color-dark">
-              ИИ-агенты, интеграции и автоматизация бизнес-процессов. Проектируем решения под конкретные задачи и ограничения компаний.
+              Библиотека практических применений ИИ, интеграции и автоматизация бизнес-процессов. От идеи — к пилоту с проверяемым результатом.
             </p>
           </div>
           <div>
